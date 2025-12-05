@@ -1,8 +1,8 @@
 #include "enemy.h"
 #include <iostream>
 
-Enemy::Enemy(const std::string& name, int hp, int atk, int ac, int atkBonus)
-    : name(name), hp(hp), attack(atk), armorClass(ac), attackBonus(atkBonus) {}
+Enemy::Enemy(const std::string& name, int hp, int atk, int ac, int atkBonus, int coins)
+    : name(name), hp(hp), attack(atk), armorClass(ac), attackBonus(atkBonus), coinDrop(coins) {}
 
 void Enemy::takeDamage(int dmg) {
     int damageTaken = dmg ;

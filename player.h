@@ -34,4 +34,8 @@ public:
     void takeDamage(int dmg);
 };
 
+#include "class/weaponmaster.h"
+#include "class/spy.h"
+#include "class/knight.h"
+
 #endif

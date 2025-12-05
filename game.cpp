@@ -6,6 +6,9 @@
 #include <ctime>    
 #include "dungeon.h"
 #include "player.h"
+#include "logo.h"
+#include "combat.h"
+#include "bestiary.h"
 
 Game::Game() {
     running = true;
@@ -13,12 +16,12 @@ Game::Game() {
 }
 
 void Game::start() {
+    Logo::print();
     mainMenu();
 }
 
 void Game::mainMenu() {
     int choice = 0;
-
     while (running) {
         std::cout << "\n=== MAIN MENU ===\n";
         std::cout << "1. Start Adventure\n";
@@ -26,21 +29,47 @@ void Game::mainMenu() {
         std::cout << "Choose an option: ";
         std::cin >> choice;
 
-        if (choice == 1) {
-            std::string playerName;
-            std::cout << "Enter your name: ";
-            std::cin >> playerName;
-            Player player(playerName);
+        switch (choice) {
+            case 1: {
+                std::string playerName;
+                int classChoice;
 
-            std::cout << "\nYou step into the darkness of the dungeon...\n";
+                std::cout << "Enter your name: ";
+                std::cin >> playerName;
+                std::cout << "\nYou step into the darkness of the dungeon...\n";
 
-            exploreDungeon(player);
-        }
-        else if (choice == 2) {
-            quit();
-        }
-        else {
-            std::cout << "Invalid option!\n";
+                std::cout << "\nChoose your class:\n";
+                std::cout << "1. Weapon Master (HP:32 DMG:11 AC:20 ATK:11) \n";
+                std::cout << "2. Spy (HP:28 DMG:11 AC:22 ATK:9) \n";
+                std::cout << "3. Knight (HP:32 DMG:9 AC:23 ATK: 9) \n";
+                std::cout << "Choice: ";
+                std::cin >> classChoice;
+
+                std::unique_ptr<Player> player;
+
+                switch (classChoice) {
+                   case 1:
+                       player = std::make_unique<WeaponMaster>(playerName);
+                       break;
+                     
+                   case 2:
+                        player = std::make_unique<Spy>(playerName);
+                        break;
+
+                   case 3:
+                        player = std::make_unique<Knight>(playerName);
+                        break;
+
+                }
+
+                exploreDungeon(*player);  
+                break;
+            }
+            case 2:
+                quit();
+                break;
+            default:
+                std::cout << "Invalid choice.\n";
         }
     }
 }
@@ -76,13 +105,26 @@ void Game::exploreDungeon(Player& player) {
             player.addCoins(amount);
         }
 
+    
+        if (dungeon.encounterEnemy()) {
+            std::cout << "\nAn enemy appears!\n";
+            Enemy foe = bestiary.createRandomEnemy(); 
+            Combat::start(player, foe);
+
+            if (!player.isAlive()) {
+                std::cout << "\nYou have been defeated... The darkness consumes your soul.\n";
+                running = false;
+                return;
+            }
+        }
+    }
        
-        if (dungeon.isAtExit()) {
+    if (dungeon.isAtExit()) {
             std::cout << "\nYou see the light of the exit!\n";
             exploring = false;
         }
     }
-}
+
 
 void Game::quit() {
     std::cout << "Exiting game...\n";

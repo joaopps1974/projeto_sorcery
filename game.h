@@ -3,11 +3,13 @@
 
 #include <string>
 #include "player.h"
+#include "bestiary.h"
 
 class Game {
 private:
     bool running;
     std::string title;
+    Bestiary bestiary;
 
 public:
     Game();

@@ -62,7 +62,10 @@ void Dungeon::movePlayer(char direction) {
 }
 
 bool Dungeon::isAtExit() const {
-    return map[playerY][playerX] == 'X';
+    return map[playerY][playerX] == 'X'; // suposto de terminar programa caso chegue no x
 }
 
 
+bool Dungeon::encounterEnemy() const {
+    return (std::rand() % 100) < 20; // 20% de chance de encontro
+}
