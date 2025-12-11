@@ -11,6 +11,7 @@ private:
     std::vector<std::vector<char>> map;
     int playerX;
     int playerY;
+    int exitX, exitY;
 
 public:
     Dungeon(int w, int h);

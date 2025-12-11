@@ -22,7 +22,10 @@ Dungeon::Dungeon(int w, int h) : width(w), height(h) {
     map[playerY][playerX] = 'P';
 
     // Place exit
-    map[height - 2][width - 2] = 'X';
+    exitX = width - 2;
+    exitY = height - 2;
+    map[exitY][exitX] = 'X';
+
 
     std::srand(std::time(nullptr));
 }
@@ -62,7 +65,7 @@ void Dungeon::movePlayer(char direction) {
 }
 
 bool Dungeon::isAtExit() const {
-    return map[playerY][playerX] == 'X'; // suposto de terminar programa caso chegue no x
+    return playerX == exitX && playerY == exitY; // suposto de terminar programa caso chegue no x
 }
 
 
