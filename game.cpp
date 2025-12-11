@@ -3,7 +3,8 @@
 #include <cctype>
 #include <memory>
 #include <cstdlib>  
-#include <ctime>    
+#include <ctime>
+#include <limits>    
 #include "dungeon.h"
 #include "player.h"
 #include "logo.h"
@@ -62,7 +63,23 @@ void Game::mainMenu() {
 
                 }
 
-                exploreDungeon(*player);  
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+     
+                int result = exploreDungeon(*player);  
+                
+                if (result == 1) {
+                   std::cout << "\nGAME OVER\n";
+                }
+
+                else if (result == 2) {
+                    std::cout << "\nYou left the dungeon\n";
+                }
+          
+                else if (result == 3) {
+                     std::cout << "\nYou escaped the dungeon\n";
+                }
+              
                 break;
             }
             case 2:
@@ -74,7 +91,7 @@ void Game::mainMenu() {
     }
 }
 
-void Game::exploreDungeon(Player& player) {
+int Game::exploreDungeon(Player& player) {
     Dungeon dungeon(10, 10);
     char input;
     bool exploring = true;
@@ -93,14 +110,13 @@ void Game::exploreDungeon(Player& player) {
 
         if (input == 'q') {
             std::cout << "You leave the dungeon.\n";
-            exploring = false;
-            continue;
+            return 2;
         }
 
         dungeon.movePlayer(input);
 
         
-        if ((std::rand() % 100) < 30) { 
+        if ((std::rand() % 100) < 50) { 
             int amount = 1 + std::rand() % 5;
             player.addCoins(amount);
         }
@@ -113,18 +129,20 @@ void Game::exploreDungeon(Player& player) {
 
             if (!player.isAlive()) {
                 std::cout << "\nYou have been defeated... The darkness consumes your soul.\n";
-                running = false;
-                return;
+                return 1;
             }
         }
-    }
+    
        
-    if (dungeon.isAtExit()) {
-            std::cout << "\nYou see the light of the exit!\n";
-            exploring = false;
+        if (dungeon.isAtExit()) {
+                std::cout << "\nYou see the light of the exit!\n";
+                return 3;
         }
     }
 
+    return 0;
+
+}
 
 void Game::quit() {
     std::cout << "Exiting game...\n";

@@ -15,7 +15,7 @@ public:
     Game();
     void start();
     void mainMenu();
-    void exploreDungeon(Player& player);
+    int exploreDungeon(Player& player);
     void quit();
 };
 

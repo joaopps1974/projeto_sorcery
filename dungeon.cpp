@@ -67,5 +67,5 @@ bool Dungeon::isAtExit() const {
 
 
 bool Dungeon::encounterEnemy() const {
-    return (std::rand() % 100) < 20; // 20% de chance de encontro
+    return (std::rand() % 100) < 40; // 40% de chance de encontro
 }
